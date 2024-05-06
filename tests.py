@@ -21,7 +21,8 @@ app.config['TESTING'] = True
 #   $ DATABASE_URL=postgresql:///cupcakes_test python3 -m unittest
 
 if not app.config['SQLALCHEMY_DATABASE_URI'].endswith("_test"):
-    raise Exception("\n\nMust set DATABASE_URL env var to db ending with _test")
+    raise Exception(
+        "\n\nMust set DATABASE_URL env var to db ending with _test")
 
 # NOW WE KNOW WE'RE IN THE RIGHT DATABASE, SO WE CAN CONTINUE
 
