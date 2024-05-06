@@ -1,7 +1,7 @@
 """Flask app for Cupcakes"""
 
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from models import db, dbx, Cupcake
 
 app = Flask(__name__)
@@ -9,6 +9,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     "DATABASE_URL", 'postgresql:///cupcakes')
 app.config['SQLALCHEMY_ECHO'] = True
 db.init_app(app)
+
+
+@app.get('/')
+def show_cupcake_form():
+    """Display the form for adding a cupcake"""
+
+    return render_template("index.html")
 
 
 @app.get("/api/cupcakes")

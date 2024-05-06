@@ -1,0 +1,20 @@
+{% extends 'base.jinja' %}
+
+<!-- cupcakes.jinja - for testing purposes -->
+
+{% block title %}
+<h1>Add a Cupcake</h1>
+{% endblock %}
+
+{% block content %}
+
+<form id="cupcakes-form" method="POST">
+    {% include '_form.jinja' %}
+</form>
+
+<script type="module">
+    import { start } from "./ui.js";
+    start();
+</script>
+
+{% endblock %}
