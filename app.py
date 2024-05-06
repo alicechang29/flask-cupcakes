@@ -14,7 +14,7 @@ db.init_app(app)
 @app.get("/api/cupcakes")
 def list_all_cupcakes():
     """Return JSON {'cupcakes': [{id, flavor, size, rating, image_url}, ...]}
-
+    FIXME: mention that returning all cupcakes
     Cupcakes are ordered by rating.
     """
 
@@ -27,7 +27,9 @@ def list_all_cupcakes():
 
 @app.get("/api/cupcakes/<int:cupcake_id>")
 def list_single_cupcake(cupcake_id):
-    """Return JSON {'cupcake': {id, flavor, size, rating, image_url}}"""
+    """Return JSON {'cupcake': {id, flavor, size, rating, image_url}}
+    FIXME: mention that returning 1 cupcake
+    """
 
     cupcake = db.get_or_404(Cupcake, cupcake_id)
     serialized = cupcake.serialize()
@@ -38,7 +40,7 @@ def list_single_cupcake(cupcake_id):
 @app.post("/api/cupcakes")
 def create_cupcake():
     """Create cupcake from posted JSON data & return it.
-
+    FIXME: document what json needs to be received into the route (show and tell)
     Returns JSON {'cupcake': {id, flavor, size, rating, image_url}}
     """
 
