@@ -127,3 +127,46 @@ class CupcakeViewsTestCase(TestCase):
 
             q = db.select(Cupcake)
             self.assertEqual(len(dbx(q).scalars().all()), 2)
+
+    def test_update_cupcake(self):
+        q = db.select(Cupcake)
+        self.assertEqual(len(dbx(q).scalars().all()), 1)
+        with app.test_client() as client:
+            url = f"/api/cupcakes/{self.cupcake_id}"
+
+            updated_cupcake = {
+                "rating": 7
+            }
+
+            resp = client.patch(url, json=updated_cupcake)
+
+            self.assertEqual(resp.status_code, 200)
+
+            self.assertEqual(resp.json, {
+                "cupcake": {
+                    "id": self.cupcake_id,
+                    "flavor": "TestFlavor",
+                    "size": "TestSize",
+                    "rating": updated_cupcake['rating'],
+                    "image_url": "http://test.com/cupcake.jpg"
+                }
+            })
+
+            q = db.select(Cupcake)
+            self.assertEqual(len(dbx(q).scalars().all()), 1)
+
+    def test_delete_cupcake(self):
+        q = db.select(Cupcake)
+        self.assertEqual(len(dbx(q).scalars().all()), 1)
+
+        with app.test_client() as client:
+            url = f"/api/cupcakes/{self.cupcake_id}"
+
+        resp = client.delete(url)
+
+        self.assertEqual(resp.status_code, 200)
+
+        self.assertEqual(resp.json, {"deleted": self.cupcake_id})
+
+        q = db.select(Cupcake)
+        self.assertEqual(len(dbx(q).scalars().all()), 0)

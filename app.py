@@ -13,8 +13,9 @@ db.init_app(app)
 
 @app.get("/api/cupcakes")
 def list_all_cupcakes():
-    """Return JSON {'cupcakes': [{id, flavor, size, rating, image_url}, ...]}
-    FIXME: mention that returning all cupcakes
+    """Return JSON of all cupcakes
+    {'cupcakes': [{id, flavor, size, rating, image_url}, ...]}
+
     Cupcakes are ordered by rating.
     """
 
@@ -27,8 +28,8 @@ def list_all_cupcakes():
 
 @app.get("/api/cupcakes/<int:cupcake_id>")
 def list_single_cupcake(cupcake_id):
-    """Return JSON {'cupcake': {id, flavor, size, rating, image_url}}
-    FIXME: mention that returning 1 cupcake
+    """Return JSON of a single cupcake
+    {'cupcake': {id, flavor, size, rating, image_url}}
     """
 
     cupcake = db.get_or_404(Cupcake, cupcake_id)
@@ -40,7 +41,8 @@ def list_single_cupcake(cupcake_id):
 @app.post("/api/cupcakes")
 def create_cupcake():
     """Create cupcake from posted JSON data & return it.
-    FIXME: document what json needs to be received into the route (show and tell)
+    Takes in cupcake attributes (flavor, size, rating, image_url).
+
     Returns JSON {'cupcake': {id, flavor, size, rating, image_url}}
     """
 
@@ -70,7 +72,7 @@ def create_cupcake():
 @app.patch("/api/cupcakes/<int:cupcake_id>")
 def update_cupcake(cupcake_id):
     """Update the cupcake with cupcake_id using the attributes passed in by
-    the user.
+    the user. FIXME: clarify what the attributes are
     Returns JSON {'cupcake': {id, flavor, size, rating, image_url}}
     """
 
@@ -82,6 +84,17 @@ def update_cupcake(cupcake_id):
     for attribute in request.json:
         if attribute in cupcake_attributes:
             setattr(cupcake, attribute, request.json[attribute])
+        # FIXME: have else throw an error
+
+    # will get flavor if it exists but will override flavor it exists or not
+    # cupcake.flavor = request.json.get('flavor')
+
+    # this works:
+    # cupcake.flavor = request.json.get('flavor', cupcake.flavor)
+
+    # we are checking truthy/falsy of request.json.get('size') -
+        # which will be None if falsy and if cupcake.size was 0, will never be able to set it back to 0
+    # cupcake.flavor = request.json.get('size') or cupcake.size
 
     db.session.commit()
 
@@ -89,9 +102,11 @@ def update_cupcake(cupcake_id):
 
     return (jsonify(cupcake=serialized), 200)
 
+
 @app.delete("/api/cupcakes/<int:cupcake_id>")
 def delete_cupcake(cupcake_id):
     """Delete the cupcake with cupcake_id.
+    FIXME: fix the return json
     Returns JSON {'cupcake': {id, flavor, size, rating, image_url}}
     """
 
@@ -101,3 +116,5 @@ def delete_cupcake(cupcake_id):
     db.session.commit()
 
     return (jsonify(deleted=cupcake_id), 200)
+
+# TODO: how does browser know to refresh the data from a GET request if updates have been made behind the scenes? (insomnia?)
