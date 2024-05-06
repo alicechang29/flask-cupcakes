@@ -65,3 +65,39 @@ def create_cupcake():
 
     # Return w/status code 201 --- return tuple (json, status)
     return (jsonify(cupcake=serialized), 201)
+
+
+@app.patch("/api/cupcakes/<int:cupcake_id>")
+def update_cupcake(cupcake_id):
+    """Update the cupcake with cupcake_id using the attributes passed in by
+    the user.
+    Returns JSON {'cupcake': {id, flavor, size, rating, image_url}}
+    """
+
+    cupcake = db.get_or_404(Cupcake, cupcake_id)
+
+    # is the below ok to handle multiple attributes?
+    cupcake_attributes = {"flavor", "size", "rating", "image_url"}
+
+    for attribute in request.json:
+        if attribute in cupcake_attributes:
+            setattr(cupcake, attribute, request.json[attribute])
+
+    db.session.commit()
+
+    serialized = cupcake.serialize()
+
+    return (jsonify(cupcake=serialized), 200)
+
+@app.delete("/api/cupcakes/<int:cupcake_id>")
+def delete_cupcake(cupcake_id):
+    """Delete the cupcake with cupcake_id.
+    Returns JSON {'cupcake': {id, flavor, size, rating, image_url}}
+    """
+
+    cupcake = db.get_or_404(Cupcake, cupcake_id)
+    db.session.delete(cupcake)
+
+    db.session.commit()
+
+    return (jsonify(deleted=cupcake_id), 200)
