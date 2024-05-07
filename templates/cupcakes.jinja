@@ -3,18 +3,25 @@
 <!-- cupcakes.jinja - for testing purposes -->
 
 {% block title %}
-<h1>Add a Cupcake</h1>
+<h1>Cupcakes</h1>
 {% endblock %}
 
 {% block content %}
+    <ul class="cupcake-list">
 
+    </ul>
+{# show every cupcake here in a list  #}
+
+<h1>Add Cupcakes</h1>
 <form id="cupcakes-form" method="POST">
     {% include '_form.jinja' %}
 </form>
 
 <script type="module">
-    import { start } from "./ui.js";
+    import { start } from "../static/cupcakes.js";
     start();
 </script>
+
+{# TODO: note: double check if it's 2 dots #}
 
 {% endblock %}

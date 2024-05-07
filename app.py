@@ -3,19 +3,21 @@
 import os
 from flask import Flask, request, jsonify, render_template
 from models import db, dbx, Cupcake
+from forms import AddCupcakeForm
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     "DATABASE_URL", 'postgresql:///cupcakes')
 app.config['SQLALCHEMY_ECHO'] = True
+app.config['SECRET_KEY'] = "secret"
 db.init_app(app)
 
 
 @app.get('/')
 def show_cupcake_form():
     """Display the form for adding a cupcake"""
-
-    return render_template("index.html")
+    form = AddCupcakeForm()
+    return render_template("cupcakes.jinja", form=form)
 
 
 @app.get("/api/cupcakes")
